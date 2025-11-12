@@ -15,8 +15,8 @@
  */
 
 module "dns-public-zone" {
-  source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 6.0"
+  source  = "Saranya3/cloud-dns/google"
+  version = "~> 0.2.6"
 
   project_id                         = var.project_id
   type                               = "public"
@@ -69,4 +69,10 @@ module "dns-public-zone" {
       ]
     },
   ]
+
+  iam_choice   = "iam_policy"
+  managed_zone = "zone1"
+  role         = "roles/viewer"
+  member       = "user:jane@google.com"
+  members      = []
 }
