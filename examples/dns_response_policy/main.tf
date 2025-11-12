@@ -15,8 +15,8 @@
  */
 
 module "dns_response_policy" {
-  source  = "terraform-google-modules/cloud-dns/google//modules/dns_response_policy"
-  version = "~> 6.0"
+  source = "../../modules/dns_response_policy"
+  # [restore-marker]   version = "~> 0.0.6"
 
   project_id         = var.project_id
   policy_name        = "dns-response-policy-test"
