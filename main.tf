@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+data "google_iam_policy" "admin" {
+  binding {
+    role = var.role
+    members = var.members
+  }
+} 
+
 resource "google_dns_managed_zone" "peering" {
   count         = var.type == "peering" ? 1 : 0
   project       = var.project_id
@@ -25,16 +32,24 @@ resource "google_dns_managed_zone" "peering" {
   force_destroy = var.force_destroy
 
   dynamic "private_visibility_config" {
-    for_each = length(var.private_visibility_config_networks) > 0 ? [1] : []
-    content {
-      dynamic "networks" {
-        for_each = var.private_visibility_config_networks
-        content {
-          network_url = networks.value
-        }
+  for_each = length(var.private_visibility_config_networks) > 0 || length(var.gke_clusters) > 0 ? [1] : []
+
+  content {
+    dynamic "networks" {
+      for_each = toset(var.private_visibility_config_networks)
+      content {
+        network_url = networks.value
+      }
+    }
+
+    dynamic "gke_clusters" {
+      for_each = toset(var.gke_clusters)
+      content {
+        gke_cluster_name = gke_clusters.value
       }
     }
   }
+}
 
   peering_config {
     target_network {
@@ -233,4 +248,30 @@ resource "google_dns_record_set" "cloud-static-records" {
     google_dns_managed_zone.private,
     google_dns_managed_zone.public,
   ]
+}
+
+resource "google_dns_managed_zone_iam_policy" "managed_zone_iam_policy" {
+  count        = var.iam_choice == "iam_policy" ? 1 : 0
+
+  managed_zone = var.managed_zone
+  project      = var.project_id
+  policy_data  = data.google_iam_policy.admin.policy_data
+}
+
+resource "google_dns_managed_zone_iam_binding" "managed_zone_iam_binding" {
+  count        = var.iam_choice == "iam_binding" ? 1 : 0
+
+  managed_zone = var.managed_zone
+  members      = var.members
+  role         = var.role
+  project      = var.project_id
+}
+
+resource "google_dns_managed_zone_iam_member" "managed_zone_iam_member" {
+  count        = var.iam_choice == "iam_member" ? 1 : 0
+
+  managed_zone = var.managed_zone
+  member       = var.member
+  role         = var.role
+  project      = var.project_id
 }
