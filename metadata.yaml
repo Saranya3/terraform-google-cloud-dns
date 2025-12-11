@@ -22,9 +22,9 @@ spec:
   info:
     title: Terraform Google Cloud DNS Module
     source:
-      repo: https://github.com/terraform-google-modules/terraform-google-cloud-dns.git
+      repo: https://github.com/Saranya3/terraform-google-cloud-dns.git
       sourceType: git
-    version: 6.1.0
+    version: 0.2.7
     actuationTool:
       flavor: Terraform
       version: ">= 1.3"

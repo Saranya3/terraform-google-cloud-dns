@@ -15,8 +15,8 @@
  */
 
 module "dns-private-zone" {
-  source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 6.1.0"
+  source  = "Saranya3/cloud-dns/google"
+  version = "~> 0.2.7"
 
   project_id = var.project_id
   type       = "private"

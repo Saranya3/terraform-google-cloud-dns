@@ -22,7 +22,7 @@ spec:
   info:
     title: gcp_dns_response_policy
     source:
-      repo: https://github.com/terraform-google-modules/terraform-google-cloud-dns.git
+      repo: https://github.com/Saranya3/terraform-google-cloud-dns.git
       sourceType: git
       dir: /modules/dns_response_policy
   ui:
